@@ -7,13 +7,13 @@
 gcloud compute zones list
 
 # Create Datalab instace
-datalab create mydatalabvm --zone [zone]
+datalab create [instance name] --zone [zone]
 
 # Do some work
 
 # Stop the datalab instance
-gcloud compute instances stop mydatalabvm
+datalab stop [instance name]
 
 # reconnect
-datalab connect mydatalabvm 
+datalab connect [instance name]
 ````
