@@ -1,11 +1,11 @@
 package com.mscatdk.datastore;
 
 import static spark.Spark.delete;
+import static spark.Spark.exception;
 import static spark.Spark.get;
+import static spark.Spark.path;
 import static spark.Spark.post;
 import static spark.Spark.put;
-import static spark.Spark.path;
-import static spark.Spark.exception;
 
 import java.io.IOException;
 
@@ -32,12 +32,8 @@ public class App  {
 		
 		Datastore datastore = DatastoreFactory.getInstance(appConfig);
 
-    	CustomerDAO customerDAO = new CustomerDAO(datastore);
+    	CustomerDAO customerDAO = DatastoreFactory.getCustomerDAO(datastore);
     	CustomerAPI customerAPI = new CustomerAPI(customerDAO);
-    	
-    	logger.info("Project id: {}", appConfig.projectId());
-    	logger.info("Credential Path: {}", appConfig.credentialPath());
-    	logger.info("Namespace: {}", appConfig.namespace());
     	
     	path("/customer", () -> {
         	get("", customerAPI.handleCustomerList, new JsonTransformer());
@@ -49,9 +45,6 @@ public class App  {
     	    	delete("", customerAPI.handleCustomerDelete, new JsonTransformer());    	        		
         	});
     	});
-
-    	
-
     	
     	exception(AppException.class, (exception, request, response) -> {
     	    response.status(500);

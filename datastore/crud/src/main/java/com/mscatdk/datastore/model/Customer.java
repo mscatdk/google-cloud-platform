@@ -1,11 +1,20 @@
-package com.mscatdk.datastore.dao;
+package com.mscatdk.datastore.model;
 
+import com.googlecode.objectify.annotation.Entity;
+import com.googlecode.objectify.annotation.Id;
+
+@Entity
 public class Customer {
 	
+	@Id
 	private Long id;
-	private final String firstName;
-	private final String lastName;
+	private String firstName;
+	private String lastName;
 
+	public Customer() { 
+		super();
+	}
+	
 	public Customer(Long id, String firstName, String lastName) {
 		super();
 		this.id = id;

@@ -5,9 +5,11 @@ import org.slf4j.LoggerFactory;
 
 import com.google.api.client.http.HttpStatusCodes;
 import com.google.gson.Gson;
+import com.googlecode.objectify.ObjectifyService;
+import com.googlecode.objectify.util.Closeable;
 import com.mscatdk.datastore.AppInputException;
-import com.mscatdk.datastore.dao.Customer;
 import com.mscatdk.datastore.dao.CustomerDAO;
+import com.mscatdk.datastore.model.Customer;
 
 import spark.Request;
 import spark.Response;
@@ -31,7 +33,9 @@ public class CustomerAPI {
 	}
 	
 	public final Route handleCustomerList = (Request request, Response response) -> {
-		return getCustomerDAO().list();
+		try (Closeable closeable = ObjectifyService.begin()) {
+			return getCustomerDAO().list();
+		}
 	};
 
 	public final Route handleCustomerGet = (Request request, Response response) -> {
