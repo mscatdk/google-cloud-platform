@@ -4,6 +4,7 @@ import static spark.Spark.delete;
 import static spark.Spark.get;
 import static spark.Spark.post;
 import static spark.Spark.put;
+import static spark.Spark.path;
 import static spark.Spark.exception;
 
 import java.io.IOException;
@@ -24,8 +25,6 @@ import com.mscatdk.datastore.dao.DatastoreFactory;
 public class App  {
 	
 	private static final Logger logger = LoggerFactory.getLogger(App.class);
-	private static final String CUSTOMER_BASE_URL = "/customer";
-	private static final String CUSTOMER_ENTITY_URL = CUSTOMER_BASE_URL + "/" + CustomerAPI.ID_PARAM_NAME;
 	
     public static void main( String[] args ) throws IOException {
     	logger.info("Starting Application...");
@@ -40,12 +39,19 @@ public class App  {
     	logger.info("Credential Path: {}", appConfig.credentialPath());
     	logger.info("Namespace: {}", appConfig.namespace());
     	
-    	get(CUSTOMER_BASE_URL, customerAPI.handleCustomerList, new JsonTransformer());
-    	post(CUSTOMER_BASE_URL, customerAPI.handleCustomerCreate, new JsonTransformer());
+    	path("/customer", () -> {
+        	get("", customerAPI.handleCustomerList, new JsonTransformer());
+        	post("", customerAPI.handleCustomerCreate, new JsonTransformer());
+        	
+        	path("/" + CustomerAPI.ID_PARAM_NAME, () -> {
+    	    	get("", customerAPI.handleCustomerGet, new JsonTransformer());
+    	    	put("", customerAPI.handleCustomerUpdate, new JsonTransformer());
+    	    	delete("", customerAPI.handleCustomerDelete, new JsonTransformer());    	        		
+        	});
+    	});
+
     	
-    	get(CUSTOMER_ENTITY_URL, customerAPI.handleCustomerGet, new JsonTransformer());
-    	put(CUSTOMER_ENTITY_URL, customerAPI.handleCustomerUpdate, new JsonTransformer());
-    	delete(CUSTOMER_ENTITY_URL, customerAPI.handleCustomerDelete, new JsonTransformer());
+
     	
     	exception(AppException.class, (exception, request, response) -> {
     	    response.status(500);
