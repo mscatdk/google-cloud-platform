@@ -1,0 +1,6 @@
+{ "Type": "Master", "Club": "Demo", "Members": 10 }
+{ "Type": "Master", "Club": "Demo2", "Members": 15 }
+{ "Type": "Master", "Club": "Demo", "Members": 20 }
+{ "Type": "Master", "Club": "Demo", "Members": 20 }
+{ "Type": "test", "Club": "Demo2", "Members": 20 }
+{ "Type": "Master", "Club": "Demo2", "Members": 10 }
