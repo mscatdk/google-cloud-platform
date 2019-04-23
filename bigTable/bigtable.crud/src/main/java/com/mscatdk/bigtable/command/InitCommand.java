@@ -11,8 +11,14 @@ import com.mscatdk.bigtable.das.BigTableDAO;
 @Parameters(commandDescription = "Create required tables and column famalies!")
 public class InitCommand implements Command {
 	
+	private BigTableDAO bigTableDAO = new BigTableDAO();
+	
+	public InitCommand(BigTableDAO bigTableDAO) {
+		this.bigTableDAO = bigTableDAO;
+	}
+	
 	public void exec(Connection connection) throws IOException {
-		BigTableDAO.getInstance().createTable(connection, App.TABLE_NAME, App.COLUMN_FAMILY_NAME);
+		bigTableDAO.createTable(connection, App.TABLE_NAME, App.COLUMN_FAMILY_NAME);
 	}
 
 }

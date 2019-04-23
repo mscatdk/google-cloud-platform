@@ -19,13 +19,19 @@ public class SimCommand implements Command {
 	private String sensorId;
 	
 	private static final Logger console = LoggerFactory.getLogger("console");
+	
+	private BigTableDAO bigTableDAO = new BigTableDAO();
+	
+	public SimCommand(BigTableDAO bigTableDAO) {
+		this.bigTableDAO = bigTableDAO;
+	}
 
 	public void exec(Connection connection) throws IOException {
 		Long temp = 25L;
 		
 		while(true) {
 			String rowkey = sensorId + (Long.MAX_VALUE - new Date().getTime());
-			BigTableDAO.getInstance().write(connection, App.TABLE_NAME, App.COLUMN_FAMILY_NAME, App.ROOM1_COLUMN_NAME, rowkey, Bytes.toBytes(temp));
+			bigTableDAO.write(connection, App.TABLE_NAME, App.COLUMN_FAMILY_NAME, App.ROOM1_COLUMN_NAME, rowkey, Bytes.toBytes(temp));
 			console.info("Wrote entry for sensoe: {} with value: {}", sensorId, temp);
 			temp = temp + getRandomNumberInRange(-5, 5);
 			

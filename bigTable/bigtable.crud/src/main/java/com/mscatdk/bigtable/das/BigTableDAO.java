@@ -20,10 +20,13 @@ import org.apache.hadoop.hbase.util.Bytes;
 
 public class BigTableDAO {
 	
-	private static final BigTableDAO bigTableDAO = new BigTableDAO();
-	
-	public static BigTableDAO getInstance() {
-		return bigTableDAO;
+	public void deleteTable(Connection connection, String tableName) throws IOException {
+		Admin admin = connection.getAdmin();
+		
+		if (admin.tableExists(TableName.valueOf(tableName))) {
+			admin.disableTable(TableName.valueOf(tableName));
+			admin.deleteTable(TableName.valueOf(tableName));
+		}
 	}
 	
 	public void createTable(Connection connection, String tableName, String... columnFamilyNames) throws IOException {

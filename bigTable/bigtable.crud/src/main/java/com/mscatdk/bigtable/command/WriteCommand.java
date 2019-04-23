@@ -19,10 +19,16 @@ public class WriteCommand implements Command {
 	
 	@Parameter(names = { "-v", "--value"}, description = "Temperatur Measurement")
 	private Long value;
+	
+	private BigTableDAO bigTableDAO = new BigTableDAO();
+	
+	public WriteCommand(BigTableDAO bigTableDAO) {
+		this.bigTableDAO = bigTableDAO;
+	}
 
 	public void exec(Connection connection) throws IOException {
 		String rowkey = sensorId + (Long.MAX_VALUE - new Date().getTime());
-		BigTableDAO.getInstance().write(connection, App.TABLE_NAME, App.COLUMN_FAMILY_NAME, App.ROOM1_COLUMN_NAME, rowkey, Bytes.toBytes(value));
+		bigTableDAO.write(connection, App.TABLE_NAME, App.COLUMN_FAMILY_NAME, App.ROOM1_COLUMN_NAME, rowkey, Bytes.toBytes(value));
 	}
 
 }

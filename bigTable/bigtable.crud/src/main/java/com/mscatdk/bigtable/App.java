@@ -14,6 +14,7 @@ import com.mscatdk.bigtable.command.InitCommand;
 import com.mscatdk.bigtable.command.ReadCommand;
 import com.mscatdk.bigtable.command.SimCommand;
 import com.mscatdk.bigtable.command.WriteCommand;
+import com.mscatdk.bigtable.das.BigTableDAO;
 
 public class App  {
 	
@@ -30,16 +31,18 @@ public class App  {
 	private static final Logger logger = LoggerFactory.getLogger(App.class);
 	private static final Logger console = LoggerFactory.getLogger("console");
 	
+	private static BigTableDAO bigTableDAO = new BigTableDAO();
+	
     public static void main( String[] args ) {
     	App app = new App();
     	
     	JCommander jc = JCommander.newBuilder()
     			.addObject(app)
-    		    .addCommand("init", new InitCommand())
-    		    .addCommand("clean", new CleanCommand())
-    		    .addCommand("write", new WriteCommand())
-    		    .addCommand("read", new ReadCommand())
-    		    .addCommand("sim", new SimCommand())
+    		    .addCommand("init", new InitCommand(bigTableDAO))
+    		    .addCommand("clean", new CleanCommand(bigTableDAO))
+    		    .addCommand("write", new WriteCommand(bigTableDAO))
+    		    .addCommand("read", new ReadCommand(bigTableDAO))
+    		    .addCommand("sim", new SimCommand(bigTableDAO))
     		    .build();
     	try {
         	jc.setProgramName("GCP BigTable demo");

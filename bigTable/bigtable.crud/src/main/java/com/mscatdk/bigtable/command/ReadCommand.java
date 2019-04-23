@@ -20,9 +20,15 @@ public class ReadCommand implements Command {
 	private String sensorId;
 	
 	private static final Logger console = LoggerFactory.getLogger("console");
+	
+	private BigTableDAO bigTableDAO = new BigTableDAO();
+	
+	public ReadCommand(BigTableDAO bigTableDAO) {
+		this.bigTableDAO = bigTableDAO;
+	}
 
 	public void exec(Connection connection) throws IOException {
-		Map<String, byte[]> data = BigTableDAO.getInstance().readColumn(connection, App.TABLE_NAME, App.COLUMN_FAMILY_NAME, App.ROOM1_COLUMN_NAME, sensorId);
+		Map<String, byte[]> data = bigTableDAO.readColumn(connection, App.TABLE_NAME, App.COLUMN_FAMILY_NAME, App.ROOM1_COLUMN_NAME, sensorId);
 		
 		for (Map.Entry<String, byte[]> entity : data.entrySet()) {
 			console.info("KeyID: {} Value: {}", entity.getKey(), Bytes.toLong(entity.getValue()));
