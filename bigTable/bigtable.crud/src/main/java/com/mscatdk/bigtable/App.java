@@ -27,6 +27,7 @@ public class App  {
 	public static final String TABLE_NAME = "temperatur";
 	public static final String COLUMN_FAMILY_NAME = "core";
 	public static final String ROOM1_COLUMN_NAME = "room1";
+	public static final String TIMESTAMP_FORMAT = "YYYY-MM-dd HH:mm:ss";
 	
 	private static final Logger logger = LoggerFactory.getLogger(App.class);
 	private static final Logger console = LoggerFactory.getLogger("console");

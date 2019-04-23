@@ -1,10 +1,10 @@
 package com.mscatdk.bigtable.command;
 
 import java.io.IOException;
-import java.util.Date;
 
 import org.apache.hadoop.hbase.client.Connection;
 import org.apache.hadoop.hbase.util.Bytes;
+import org.joda.time.DateTime;
 
 import com.beust.jcommander.Parameter;
 import com.beust.jcommander.Parameters;
@@ -27,7 +27,7 @@ public class WriteCommand implements Command {
 	}
 
 	public void exec(Connection connection) throws IOException {
-		String rowkey = sensorId + (Long.MAX_VALUE - new Date().getTime());
+		String rowkey = sensorId + (Long.MAX_VALUE - DateTime.now().getMillis());
 		bigTableDAO.write(connection, App.TABLE_NAME, App.COLUMN_FAMILY_NAME, App.ROOM1_COLUMN_NAME, rowkey, Bytes.toBytes(value));
 	}
 
