@@ -2,6 +2,7 @@ package com.mscatdk.pubsub;
 
 import java.util.Random;
 import java.util.concurrent.Executor;
+import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 import org.joda.time.DateTime;
@@ -36,6 +37,9 @@ public class App {
 
 	@Parameter(names= "--period", description = "Approx. time between readings in ms")
 	private Long period;
+	
+	@Parameter(names= "--temp", description = "Temperature")
+	private Integer temp;
 
 	private static final Random randomGenerator = new Random();
 	
@@ -49,7 +53,7 @@ public class App {
         					.build();
         
         jc.parse(args);
-        jc.setProgramName("Temperatur-sensor");
+        jc.setProgramName("Temperature-sensor");
         
         app.run();
     }
@@ -57,46 +61,63 @@ public class App {
     public void run() throws Exception {
     	ProjectTopicName topicName = ProjectTopicName.of(projectId, topicId);
     	Publisher publisher = null;
-    	Executor executer = Executors.newFixedThreadPool(10);
+    	ExecutorService executer = Executors.newFixedThreadPool(10);
     	
     	try {
     		publisher = Publisher.newBuilder(topicName).build();
     		
-    		JsonObject json = new JsonObject();
-    		json.addProperty("room", roomName);
-    		json.addProperty("country", "DK");
-    		
-    		while (true) {
-    			int temperatur = 25 + randomGenerator.nextInt(20)-9;
-    			json.addProperty("temperatur", temperatur);
-    			ByteString data = ByteString.copyFromUtf8(json.toString());
-    			
-    			console.info("Send message: {}", json.toString());
-    			
-    			PubsubMessage pubsubMessage = PubsubMessage.newBuilder()
-    											.setData(data)
-    											.putAttributes("ts", Long.toString(DateTime.now().getMillis()))
-    											.build();
-    			ApiFuture<String> future = publisher.publish(pubsubMessage);
-    			
-    			ApiFutures.addCallback(future, new ApiFutureCallback<String>() {
- 				   public void onSuccess(String messageId) {
- 					  console.info("published with message id: {}", messageId);
-  				   }
-
-  				   public void onFailure(Throwable t) {
-  					 console.info("failed to publish!", t);
-  				   }
-  				 }, executer);
-    			
-    			sleep(period);
+    		if (period != null) {
+    			simulate(publisher, executer);
+    		} else {
+    			publishReading(publisher, executer, temp);
     		}
     	} finally {
     		if (publisher != null) {
     			publisher.shutdown();
     		}
+    		
+    		executer.shutdownNow();
     	}
     }
+
+	private void simulate(Publisher publisher, ExecutorService executer) {
+		while (true) {
+			int temperatur = 25 + randomGenerator.nextInt(20)-9;
+			publishReading(publisher, executer, temperatur);
+			
+			sleep(period);
+		}
+	}
+
+	private void publishReading(Publisher publisher, Executor executer, int temperature) {
+		JsonObject json = new JsonObject();
+		json.addProperty("room", roomName);
+		json.addProperty("country", "DK");
+		json.addProperty("temperature", temperature);
+		
+		String str = json.toString();
+		ByteString data = ByteString.copyFromUtf8(str);
+		
+		console.info("Send message: {}", str);
+		
+		PubsubMessage pubsubMessage = PubsubMessage.newBuilder()
+										.setData(data)
+										.putAttributes("ts", Long.toString(DateTime.now().getMillis()))
+										.build();
+		ApiFuture<String> future = publisher.publish(pubsubMessage);
+		
+		ApiFutures.addCallback(future, new ApiFutureCallback<String>() {
+		   public void onSuccess(String messageId) {
+			  console.info("published with message id: {}", messageId);
+		   }
+
+		   public void onFailure(Throwable t) {
+			 console.info("failed to publish!", t);
+		   }
+		 }, executer);
+	}
+	
+
     
     private void sleep(Long millies) {
     	try {
