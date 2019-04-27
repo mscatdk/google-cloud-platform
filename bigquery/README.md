@@ -16,6 +16,17 @@ sed -i 's/"fieldDelimiter": ","/"fieldDelimiter": "|"/g; s/"quote": "\\""/"quote
 bq mk --external_table_definition=indiv_def.json -t ${DATASET}.transactions 
 ````
 
+## bq command
+
+````bash
+# Create dataset
+bq mk [dataset name]
+
+# Create table
+bq mk \
+--time_partitioning_field timestamp \
+--schema name:string,age:integer,test:float,timestamp:timestamp -t [dataset name].[table name]
+````
 
 ## UDF
 
