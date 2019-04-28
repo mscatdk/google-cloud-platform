@@ -1,0 +1,12 @@
+DROP TABLE store.inventory;
+DROP DATABASE store;
+
+CREATE DATABASE store;
+
+USE store;
+
+CREATE TABLE inventory (Product String, Cost Int, Price Int) ROW FORMAT DELIMITED FIELDS TERMINATED BY ',';
+
+load data INPATH 'gs://lucid-authority-228515-dataproc/data.csv' OVERWRITE INTO TABLE inventory;
+
+SELECT *, price-cost as earning FROM store.inventory;
