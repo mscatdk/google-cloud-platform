@@ -41,3 +41,9 @@ return names.join(" ").split(",").reverse().join(" ").trim();
 """;
 SELECT CAND_NAME, translate(CAND_NAME) FROM `campaign_funding.candidates` LIMIT 1;
 ````
+
+## Snapshots
+````SQL
+# Data from one hour ago
+SELECT count(*) FROM `test.finance` FOR SYSTEM_TIME AS OF TIMESTAMP_SUB(CURRENT_TIMESTAMP(), INTERVAL 1 HOUR);
+````
