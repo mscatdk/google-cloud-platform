@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>Google Cloud speech-to-speech</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="stylesheet"
+		href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+		integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh"
+		crossorigin="anonymous">
+</head>
+
+<div class="jumbotron">
+	<h1 class="display-4">Hello!</h1>
+	<p class="lead">This is a quick demo of how the Google
+		speech-to-text, translation, and text-to-speech APIs can be used to
+		achieve speech-to-speech. You will need to allow this page to access
+		your microphone when asked for this page to work</p>
+	<p>Press record, speak, and then press Stop</p>
+	<hr class="my-4">
+	<p class="lead">
+	<form>
+		<div class="form-group">
+			<label for="sourceLanguage">Source Language:</label> 
+			<select class="form-control" id="sourceLanguage">
+				<option value="DANISH">DANISH</option>
+				<option value="SWEDISH">SWEDISH</option>
+				<option value="NORWEGIAN">NORWEGIAN</option>
+				<option value="GERMAN">GERMAN</option>
+				<option value="ENGLISH" selected>ENGLISH</option>
+			</select>
+		</div>
+
+		<div class="form-group">
+			<label for="targetLanguage">Target Language:</label> <select class="form-control"
+				id="targetLanguage">
+				<option value="DANISH">DANISH</option>
+				<option value="SWEDISH">SWEDISH</option>
+				<option value="NORWEGIAN">NORWEGIAN</option>
+				<option value="GERMAN" selected>GERMAN</option>
+				<option value="ENGLISH">ENGLISH</option>
+			</select>
+		</div>
+		</form>
+		<div id="controls" class="form-group">
+			<button type='button' class="btn btn-primary mb-2" id="recordButton">Record</button>
+			<button type='button' class="btn btn-secondary mb-2" id="pauseButton" disabled>Pause</button>
+			<button type='button' class="btn btn-success mb-2" id="stopButton" disabled>Stop</button>
+		</div>
+	<div id="messageBox" role="alert"></div>
+	<hr class="my-4">
+	<div class="spinner-border" role="status" id="spinner">
+  		<span class="sr-only">Loading...</span>
+	</div>
+	
+	<div>
+		<div id="resultHeading"></div>
+		<div id="rawSpeech"></div>
+		<div id="rawText"></div>
+		<div id="translatedText"></div>
+		<div id="translatedSpeech"></div>
+	</div>
+</div>
+
+
+<script
+	src="https://cdn.rawgit.com/mattdiamond/Recorderjs/08e7abd9/dist/recorder.js"></script>
+<script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
+	integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
+	crossorigin="anonymous"></script>
+<script
+	src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+	integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+	crossorigin="anonymous"></script>
+<script
+	src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
+	integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
+	crossorigin="anonymous"></script>
+<script src="js/app.js"></script>
+</html>
