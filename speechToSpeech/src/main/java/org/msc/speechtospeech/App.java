@@ -1,6 +1,8 @@
 package org.msc.speechtospeech;
 
+import static spark.Spark.before;
 import static spark.Spark.post;
+import static spark.Spark.port;
 import static spark.Spark.redirect;
 import static spark.Spark.staticFiles;
 
@@ -35,6 +37,8 @@ import com.google.cloud.translate.TranslateOptions;
 import com.google.cloud.translate.Translation;
 import com.google.gson.JsonObject;
 import com.google.protobuf.ByteString;
+import com.qmetric.spark.authentication.AuthenticationDetails;
+import com.qmetric.spark.authentication.BasicAuthenticationFilter;
 
 import spark.Request;
 
@@ -46,10 +50,12 @@ public class App {
 	
 	public static void main(String[] args) {
 		logger.debug("OS temporary directory is {}", TEMP_DIR);
-		staticFiles.location("/public");
+        staticFiles.location("/public");
 		staticFiles.externalLocation(TEMP_DIR);
 		
 		//before(new BasicAuthenticationFilter("/*", new AuthenticationDetails("demo", "Accenture2020")));
+		
+		port(readPort());
 
 		redirect.get("/", "demo.html");
 
@@ -81,6 +87,22 @@ public class App {
 		});
 	}
 	
+	private static int readPort() {
+		try {
+			if (System.getenv("PORT") != null) {
+				return Integer.parseInt(System.getenv("PORT"));
+			} else {
+				if (System.getProperty("PORT") != null) {
+					return Integer.parseInt(System.getProperty("PORT"));
+				} else {
+					return 4567;
+				}
+			}
+		} catch (Exception e) {
+			return 4567;
+		}
+	}
+	
 	public static byte[] readPartData(Request request, String name) throws IOException, ServletException {
 		try (InputStream is = request.raw().getPart(name).getInputStream()) {
 
@@ -101,7 +123,7 @@ public class App {
 	public static String speechToText(byte[] audioData, Language language) throws IOException {
 		
 		 try (SpeechClient speechClient = SpeechClient.create()) {
-			   RecognitionConfig.AudioEncoding encoding = RecognitionConfig.AudioEncoding.LINEAR16;
+			   RecognitionConfig.AudioEncoding encoding = RecognitionConfig.AudioEncoding.ENCODING_UNSPECIFIED;
 			   RecognitionConfig config = RecognitionConfig.newBuilder()
 			     .setEncoding(encoding)
 			     .setLanguageCode(language.getLanguageCode()) 

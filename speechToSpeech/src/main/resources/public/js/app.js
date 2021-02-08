@@ -31,6 +31,12 @@ var sourceLanguage = document.getElementById("sourceLanguage");
 recordButton.addEventListener("click", startRecording);
 stopButton.addEventListener("click", stopRecording);
 pauseButton.addEventListener("click", pauseRecording);
+uploadButton.addEventListener("click", uploadFile);
+
+function uploadFile() {
+	let data = document.getElementById("audioUpload").files[0];
+	processData(data)
+}
 
 function startRecording() {    
     var constraints = { audio: true, video:false }
@@ -84,10 +90,10 @@ function stopRecording() {
 	
 	gumStream.getAudioTracks()[0].stop();
 	printMessage("Processing...");
-	rec.exportWAV(createDownloadLink);
+	rec.exportWAV(processData);
 }
 
-function createDownloadLink(blob) {
+function processData(blob) {
 	var filename = new Date().toISOString();
 
 	  var xhr=new XMLHttpRequest();

@@ -42,7 +42,19 @@
 			</select>
 		</div>
 		</form>
+		<hr class="my-4">
+		<form>
+			<div class="form-group">
+				<label for="audioUpload">Upload Audio file (only mono wav files are accepted.):</label>
+				<input type="file" class="form-control-file" name="audioUpload" id="audioUpload" accept=".wav">
+				<br>
+				<button type='button' class="btn btn-primary mb-2" id="uploadButton">Upload</button>
+			</div>
+		</form>
+		<hr class="my-4">
 		<div id="controls" class="form-group">
+			<span>Record audio using your microphone:</span>
+			<br>
 			<button type='button' class="btn btn-primary mb-2" id="recordButton">Record</button>
 			<button type='button' class="btn btn-secondary mb-2" id="pauseButton" disabled>Pause</button>
 			<button type='button' class="btn btn-success mb-2" id="stopButton" disabled>Stop</button>
