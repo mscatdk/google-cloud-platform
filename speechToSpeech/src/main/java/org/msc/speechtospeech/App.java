@@ -50,12 +50,13 @@ public class App {
 	
 	public static void main(String[] args) {
 		logger.debug("OS temporary directory is {}", TEMP_DIR);
+		
+		port(readPort());
+		
         staticFiles.location("/public");
 		staticFiles.externalLocation(TEMP_DIR);
 		
 		before(new BasicAuthenticationFilter("/*", new AuthenticationDetails("demo", "Speech2020")));
-		
-		port(readPort());
 
 		redirect.get("/", "demo.html");
 
