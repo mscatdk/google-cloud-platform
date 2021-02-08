@@ -53,7 +53,7 @@ public class App {
         staticFiles.location("/public");
 		staticFiles.externalLocation(TEMP_DIR);
 		
-		//before(new BasicAuthenticationFilter("/*", new AuthenticationDetails("demo", "Accenture2020")));
+		before(new BasicAuthenticationFilter("/*", new AuthenticationDetails("demo", "Speech2020")));
 		
 		port(readPort());
 
